@@ -1,0 +1,17 @@
+button{
+    cursor: pointer;
+    border: none;
+    padding: 12px 18px;
+    font-size: 1.2em;
+    transition: ease-in-out 0.2s;
+}
+
+/* button:hover{
+    box-shadow: 0 0 15px 8px rgba(255, 94, 94, 0.253);
+    background-color: rgb(255, 235, 235);
+    transition: ease-in-out 0.2s;
+} */
+
+button:focus{
+    outline: none;
+}
