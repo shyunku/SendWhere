@@ -1,0 +1,58 @@
+<html>
+    <head>
+        <%- include("partials/common_header.ejs") %>
+        <script src="../js/room.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+    </head>
+    <body>
+        <div class="whole-wrapper">
+            <div class="room-upper-tab">
+                <span class="room-title">
+                    <span style="color: rgb(129, 255, 112);"><%= roomBossName %></span>'s Room
+                    <input id="my_user_id" type="hidden" value="<%= myUserId %>">
+                    <input id="my_nickname" type="hidden" value="<%= myNickname %>">
+                    <input id="my_tag" type="hidden" value="<%= myTag %>">
+                    <input id="room_id" type="hidden" value="<%= roomId %>">
+                </span>
+            </div>
+            <div class="room-content">
+                <div class="participants-list-wrapper">
+                    <div class="upper-info-tab">
+                        <span>Participants (</span><span id="participants_num">0</span><span>)</span>
+                    </div>
+                    <div class="participants-list" id="participants_list">
+                    </div>
+                </div>
+                <div class="chatting-wrapper">
+                    <div class="upper-info-tab">
+                        <span class="block-span">Chat (915)</span>
+                    </div>
+                    <div class="chat-list-wrapper">
+                        <div class="chat-list-flex-param">
+                            <div class="chat-list" id="chat_list">
+                        </div>
+                    </div>
+                    </div>
+                    <div class="chat-typer-wrapper" id="chat_typer_wrapper">
+                        <textarea id="chat_typer" spellcheck="false"></textarea>
+                    </div>
+                </div>
+                <div class="shared-file-list-wrapper">
+                    <div class="upper-info-tab">
+                        <span class="block-span">Shared (2)</span>
+                    </div>
+                </div>
+                <div class="upload-list-wrapper">
+                    <div class="upper-info-tab">
+                        <span class="block-span">Upload (4)</span>
+                    </div>
+                </div>
+                <div class="download-list-wrapper">
+                    <div class="upper-info-tab">
+                        <span class="block-span">Download (2)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
