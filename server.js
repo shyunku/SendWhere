@@ -4,6 +4,8 @@ const ejs = require('ejs');
 const path = require('path');
 const pbip = require('public-ip');
 const util = require('./server_side/util');
+const multer = require('multer');
+const upload = multer({dest: 'saved_files/'});
 const Map = require('./server_side/map');
 
 const port = 6400;
@@ -106,6 +108,7 @@ app.post('/generate-room-id', (req, res)=>{
             id: user_id,
         },
         participants: [],
+        fileLibrary:[],
     });
 
     if(user_id == null){
@@ -124,6 +127,18 @@ app.post('/touch-room', (req, res)=>{
     }
 });
 
+app.post('/upload', upload.any(), (req, res)=>{
+    let roomId = req.body.roomId;
+    let room = util.get_room_by_id(roomId);
+    if(room != null){
+        broadcastToAll(roomId, 'shared', req.files);
+        res.send('uploaded!: '+req.files);
+    }else{
+        console.log("Fatal Error");
+        res.send('Failed: room is null');
+    }
+});
+
 
 /* server io socket listener */
 
@@ -137,7 +152,6 @@ io.on('connection', function(socket){
             broadcast(socket, 'first-touch-setting', {
                 currentParticipantsList: roomInfo.participants,
             });
-
             broadcastExceptForInRoom(roomInfo.roomId, socket, 'join', {
                 nickname: data.nickname,
                 tag: data.tag,

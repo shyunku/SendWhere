@@ -1,5 +1,6 @@
 let socket = null;
 let partyNum = 0;
+let chatNum = 0;
 
 $(()=>{
     socket = io();
@@ -36,13 +37,102 @@ $(()=>{
         });
     });
 
-    //adjust chatlist height
+    // adjust chatlist height
     let chatList = $('#chat_list');
     let chatTyperWrapper = $('#chat_typer_wrapper');
-    console.log(chatList.position());
-    console.log(chatTyperWrapper.position());
     let heightDiff = chatTyperWrapper.position().top - chatList.position().top;
     chatList.innerHeight(heightDiff-2);
+
+    let uploadArea = $('#upload_area');
+    let uploadParent = uploadArea.parent();
+    let diff = uploadParent.position().top + uploadParent.outerHeight(true) - uploadArea.position().top;
+    uploadArea.height(diff-2);
+
+    let downloadArea = $('#download_area');
+    diff = window.innerHeight - downloadArea.position().top;
+    downloadArea.height(diff-3);
+
+    let roomContent = $('#room_content');
+    diff = window.innerHeight - roomContent.position().top;
+    roomContent.css({'max-height': (diff-3)+"px"});
+
+    // file drag & drop
+    uploadArea.on('dragover', function(e){
+        e.preventDefault();
+        $(this).addClass('drag-overred');
+    });
+
+    uploadArea.on('dragleave', function(e){
+        $(this).removeClass('drag-overred');
+    });
+
+    uploadArea.on('drop', function(e){
+        $(this).removeClass('drag-overred');
+        if(e.originalEvent.dataTransfer && e.originalEvent.dataTransfer.files.length){
+            e.preventDefault();
+            e.stopPropagation();
+
+            const uploadBody = $('#upload_body');
+            let files = e.originalEvent.dataTransfer.files;
+
+            console.log(files);
+            
+            for(let i=0;i<files.length;i++){
+                let file = files[i];
+                let formData = new FormData();
+                
+                if(file.upload == 'disable'){
+                    console.log('Cannot upload '+file.name);
+                    break;
+                }
+                formData.append('roomId', $('#room_id').val());
+                formData.append('upload-files', file, file.name);
+                let fileID = generate_random_str(8);
+
+                // display on upload tab
+                uploadBody.append(`
+                    <tr id="file_progress_info_${fileID}">
+                        <td>${file.name}</td>
+                        <td>${file.type}</td>
+                        <td>${refineFileSizeStr(file.size)}</td>
+                        <td id="file_status_${fileID}">Pending</td>
+                        <td>-</td>
+                        <td id="file_progress_${fileID}">-</td>
+                    </tr>`);
+
+                // ajax upload
+                $.ajax({
+                    url: '/upload',
+                    data: formData,
+                    type: 'POST',
+                    enctype: 'multipart/form-data',
+                    contentType: false,
+                    processData: false,
+                    xhr: function(){
+                        let xhr = $.ajaxSettings.xhr();
+                        $(`#file_status_${fileID}`).text('Uploading');
+                        xhr.upload.onprogress = function(e){
+                            let progress = 100*e.loaded/e.total;
+                            $(`#file_progress_${fileID}`).text(
+                                numberWithCommas(e.loaded)+"/"+numberWithCommas(e.total) +
+                                "("+progress.toFixed(3)+"%)");
+                            console.log(e.loaded+"/"+e.total);
+                        };
+                        return xhr;
+                    },
+                    success: function(res){
+                        $(`#file_status_${fileID}`).text('Done');
+                        $(`#file_progress_${fileID}`).text('100%');
+                        console.log(res);
+                        console.log('upload complete: '+file.name);
+                    },
+                    error: function(e){
+                        console.error(e.statusText);
+                    }
+                });
+            }
+        }
+    });
 });
 
 function sendMessageToServer(data){
@@ -81,7 +171,6 @@ function receiveMessageFromServer(data){
             break;
         case 'leave':
             participantDivs = participantList.children();
-            console.log(participantDivs);
             for(let i=0;i<participantDivs.length;i++){
                 let elem = $(participantDivs[i]);
                 let curId = elem.find('input[name="participant_user_id"]').val();
@@ -120,6 +209,7 @@ function receiveMessageFromServer(data){
             if(isOnEnd){
                 chatList.scrollTop(chatList.prop("scrollHeight"));
             }
+            $('#chats_num').text(++chatNum);
             break;
     }  
 }
