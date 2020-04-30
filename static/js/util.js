@@ -27,3 +27,27 @@ function generate_random_str(len){
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+function extractExtension(filename) {
+    let seg = filename.split('.');
+    if(seg.length == 1)return "-";
+    return seg[seg.length-1];
+}
+
+function getRefinedRemainTime(remain){
+    let h = parseInt(remain / 3600);
+    let m = parseInt((remain % 3600)/60);
+    let s = remain %60;
+    if(h!=0){
+        return h+":"+zeroPad(m,2)+":"+zeroPad(s,2);
+    }else{
+        return m+":"+zeroPad(s,2);
+    }
+}
+
+function zeroPad(str, len){
+    str = String(str);
+    for(let i=0;i<len-str.length;i++)
+        str = "0" + str;
+    return str;
+}

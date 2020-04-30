@@ -325,6 +325,10 @@ body{
     width: 10%;
 }
 
+.file-list-table tr th:nth-child(6){
+    width: 40%;
+}
+
 .process-element-wrapper{
     display: inline-block;
     width: 100%;

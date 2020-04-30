@@ -80,6 +80,7 @@ $(()=>{
             for(let i=0;i<files.length;i++){
                 let file = files[i];
                 let formData = new FormData();
+                let now = new Date();
                 
                 if(file.upload == 'disable'){
                     console.log('Cannot upload '+file.name);
@@ -96,9 +97,12 @@ $(()=>{
                         <td>${file.type}</td>
                         <td>${refineFileSizeStr(file.size)}</td>
                         <td id="file_status_${fileID}">Pending</td>
-                        <td>-</td>
+                        <td id="progress_remain_${fileID}">-</td>
                         <td id="file_progress_${fileID}">-</td>
                     </tr>`);
+
+                $('#room_content').append(`<input type="hidden" 
+                id="file_download_start_timstamp_${fileID}" value="${now.getTime()}">`);
 
                 // ajax upload
                 $.ajax({
@@ -116,15 +120,17 @@ $(()=>{
                             $(`#file_progress_${fileID}`).text(
                                 numberWithCommas(e.loaded)+"/"+numberWithCommas(e.total) +
                                 "("+progress.toFixed(3)+"%)");
-                            console.log(e.loaded+"/"+e.total);
+                            let time_diff = new Date().getTime() - parseInt(
+                                $(`#file_download_start_timstamp_${fileID}`).val());
+                            let time_prediction = parseInt(time_diff * (e.total-e.loaded) / (e.loaded*1000));
+                            let refined = getRefinedRemainTime(time_prediction);
+                            $(`#progress_remain_${fileID}`).text(refined);
                         };
                         return xhr;
                     },
                     success: function(res){
                         $(`#file_status_${fileID}`).text('Done');
                         $(`#file_progress_${fileID}`).text('100%');
-                        console.log(res);
-                        console.log('upload complete: '+file.name);
                     },
                     error: function(e){
                         console.error(e.statusText);
@@ -210,6 +216,20 @@ function receiveMessageFromServer(data){
                 chatList.scrollTop(chatList.prop("scrollHeight"));
             }
             $('#chats_num').text(++chatNum);
+            break;
+        case 'shared':
+            let fileBundle = content;
+            fileBundle.forEach(elem => {
+                // let encryptedFilename = elem.filename;
+                let originalFilename = elem.originalname;
+                let fileSize = refineFileSizeStr(elem.size);
+    
+                $('#shared_body').append(`<tr>
+                    <td>${originalFilename}</td>
+                    <td>${extractExtension(originalFilename)}</td>
+                    <td>${fileSize}</td>
+                </tr>`);
+            });
             break;
     }  
 }

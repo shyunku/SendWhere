@@ -133,6 +133,7 @@ app.post('/upload', upload.any(), (req, res)=>{
     if(room != null){
         broadcastToAll(roomId, 'shared', req.files);
         res.send('uploaded!: '+req.files);
+        //room에 파일로그 추가해줘야함
     }else{
         console.log("Fatal Error");
         res.send('Failed: room is null');
