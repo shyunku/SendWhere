@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
     <head>
         <%- include("partials/common_header.ejs") %>
@@ -27,12 +28,7 @@
                     <div class="upper-info-tab">
                         <span>Chat (</span><span id="chats_num">0</span><span>)</span>
                     </div>
-                    <div class="chat-list-wrapper">
-                        <div class="chat-list-flex-param">
-                            <div class="chat-list" id="chat_list">
-                        </div>
-                    </div>
-                    </div>
+                    <div class="chat-list" id="chat_list"></div>
                     <div class="chat-typer-wrapper" id="chat_typer_wrapper">
                         <textarea id="chat_typer" spellcheck="false"></textarea>
                     </div>
@@ -54,43 +50,37 @@
                         </table>
                     </div>
                 </div>
-                <div class="upload-list-wrapper">
-                    <div class="upper-info-tab">
-                        <span class="block-span">Upload (1/2)</span>
-                    </div>
-                    <div class="file-entry-area drag-droppable-area" id="upload_area">
-                        <table class="file-list-table" id="upload_table">
-                            <colgroup>
-                                <col style="width: 35%"/>
-                                <col style="width: 10%"/>
-                                <col style="width: 10%"/>
-                                <col style="width: 10%"/>
-                                <col style="width: 10%"/>
-                                <col style="width: auto"/>
-                            </colgroup>
-                            <tbody id="upload_body">
-                                <tr class="first-line">
-                                    <th>File Name</th>
-                                    <th>Ext.</th>
-                                    <th>File Size</th>
-                                    <th>Status</th>
-                                    <th>Remain</th>
-                                    <th>Progress</th>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="drag-and-drop-guide-wrapper">
-                            <span tabindex="-1">Drag & drop here</span>
+                <div class="file-upload-download">
+                    <div class="upload-list-wrapper">
+                        <div class="upper-info-tab">
+                            <span class="block-span">Upload (1/2)</span>
+                        </div>
+                        <div class="file-entry-area drag-droppable-area" id="upload_area">
+                            <table class="file-list-table" id="upload_table">
+                                <thead>
+                                    <tr class="first-line">
+                                        <th>File Name</th>
+                                        <th>Ext.</th>
+                                        <th>File Size</th>
+                                        <th>Status</th>
+                                        <th>Remain</th>
+                                        <th>Progress</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="upload_body">
+                                </tbody>
+                            </table>
+                            <div class="drag-and-drop-guide-wrapper">
+                                <span tabindex="-1">Drag & drop here</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="download-list-wrapper">
-                    <div class="upper-info-tab">
-                        <span class="block-span">Download (0)</span>
-                    </div>
-                    <div class="file-entry-area" id="download_area">
-                        <table class="file-list-table" id="download_table">
-                            <tbody>
+                    <div class="download-list-wrapper">
+                        <div class="upper-info-tab">
+                            <span class="block-span">Download (0)</span>
+                        </div>
+                        <div class="file-entry-area" id="download_area">
+                            <table class="file-list-table" id="download_table">
                                 <tr class="first-line">
                                     <th>File Name</th>
                                     <th>Ext.</th>
@@ -99,8 +89,8 @@
                                     <th>Remain</th>
                                     <th>Progress</th>
                                 </tr>
-                            </tbody>
-                        </table>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

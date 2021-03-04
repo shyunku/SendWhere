@@ -38,23 +38,8 @@ $(()=>{
     });
 
     // adjust chatlist height
-    let chatList = $('#chat_list');
-    let chatTyperWrapper = $('#chat_typer_wrapper');
-    let heightDiff = chatTyperWrapper.position().top - chatList.position().top;
-    chatList.innerHeight(heightDiff-2);
 
     let uploadArea = $('#upload_area');
-    let uploadParent = uploadArea.parent();
-    let diff = uploadParent.position().top + uploadParent.outerHeight(true) - uploadArea.position().top;
-    uploadArea.height(diff-2);
-
-    let downloadArea = $('#download_area');
-    diff = window.innerHeight - downloadArea.position().top;
-    downloadArea.height(diff-3);
-
-    let roomContent = $('#room_content');
-    diff = window.innerHeight - roomContent.position().top;
-    roomContent.css({'max-height': (diff-3)+"px"});
 
     // file drag & drop
     uploadArea.on('dragover', function(e){
@@ -98,8 +83,7 @@ $(()=>{
                         <td>${refineFileSizeStr(file.size)}</td>
                         <td id="file_status_${fileID}">Pending</td>
                         <td id="progress_remain_${fileID}">-</td>
-                        <td id="file_progress_${fileID}">-</td>
-                        <progress value="20" max="100"></progress>
+                        <td id="file_progress_${fileID}"><progress value="20" max="100"></progress></td>
                     </tr>`);
 
                 $('#room_content').append(`<input type="hidden" 
@@ -118,9 +102,7 @@ $(()=>{
                         $(`#file_status_${fileID}`).text('Uploading');
                         xhr.upload.onprogress = function(e){
                             let progress = 100*e.loaded/e.total;
-                            $(`#file_progress_${fileID}`).text(
-                                numberWithCommas(e.loaded)+"/"+numberWithCommas(e.total) +
-                                "("+progress.toFixed(3)+"%)");
+                            $(`#file_progress_${fileID} progress`).attr("value", progress);
                             let time_diff = new Date().getTime() - parseInt(
                                 $(`#file_download_start_timstamp_${fileID}`).val());
                             let time_prediction = parseInt(time_diff * (e.total-e.loaded) / (e.loaded*1000));
@@ -131,7 +113,7 @@ $(()=>{
                     },
                     success: function(res){
                         $(`#file_status_${fileID}`).text('Done');
-                        $(`#file_progress_${fileID}`).text('100%');
+                        $(`#file_progress_${fileID} progress`).attr("value", 100);
                     },
                     error: function(e){
                         console.error(e.statusText);
