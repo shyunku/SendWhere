@@ -99,6 +99,7 @@ $(()=>{
                         <td id="file_status_${fileID}">Pending</td>
                         <td id="progress_remain_${fileID}">-</td>
                         <td id="file_progress_${fileID}">-</td>
+                        <progress value="20" max="100"></progress>
                     </tr>`);
 
                 $('#room_content').append(`<input type="hidden" 
@@ -148,6 +149,9 @@ function sendMessageToServer(data){
 
 function receiveMessageFromServer(data){
     console.log(data);
+    let host = window.location.hostname;
+    let port = window.location.port;
+
     const type = data.type;
     const content = data.content;
 
@@ -228,6 +232,7 @@ function receiveMessageFromServer(data){
                     <td>${originalFilename}</td>
                     <td>${extractExtension(originalFilename)}</td>
                     <td>${fileSize}</td>
+                    <td><a href="http://${host}:${port}/download?id=${elem.filename}&original_name=${originalFilename}">Download</a></td>
                 </tr>`);
             });
             break;

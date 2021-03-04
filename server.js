@@ -7,6 +7,7 @@ const util = require('./server_side/util');
 const multer = require('multer');
 const upload = multer({dest: 'saved_files/'});
 const Map = require('./server_side/map');
+const fs = require('fs');
 
 const port = 6400;
 let publicIpAddress = null;
@@ -26,12 +27,6 @@ app.set('views', path.join(__dirname, './views'));
 app.use(express.static(path.join(__dirname, 'static')));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-// app.use(function(req, res, next){
-//     const cip = req.headers['x-forwarded-for'] ||  req.connection.remoteAddress;
-//     const cipv4 = util.get_ipv4_from_ipstr(cip);
-//     console.log("REQUEST: " + util.get_current_time_str()+" | "+cipv4+" > "+req.url);
-//     next();
-// });
 
 app.get('/', (req, res)=>{
     let client_cookie = req.headers.cookie;
@@ -52,6 +47,14 @@ app.get('/', (req, res)=>{
         }
     }
     res.render('home');
+});
+
+app.get('/download', (req, res)=>{
+    let file_id = req.query.id || "";
+    let original_name = req.query.original_name || "";
+    let file_path = `${__dirname}/saved_files/${file_id}`;
+
+    res.download(file_path, original_name);
 });
 
 app.get('/room', (req, res)=>{
