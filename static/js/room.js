@@ -83,7 +83,7 @@ $(()=>{
                         <td>${refineFileSizeStr(file.size)}</td>
                         <td id="file_status_${fileID}">Pending</td>
                         <td id="progress_remain_${fileID}">-</td>
-                        <td id="file_progress_${fileID}"><progress value="20" max="100"></progress></td>
+                        <td id="file_progress_${fileID}"><progress value="0" max="100"></progress></td>
                     </tr>`);
 
                 $('#room_content').append(`<input type="hidden" 

@@ -3,7 +3,7 @@ body{
     background: rgb(17, 17, 17);
     margin: 0;
     color: white;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .whole-wrapper{
@@ -12,6 +12,8 @@ body{
     width: 100%;
     height: 100%;
     text-align: center;
+
+    overflow-y: scroll;
 }
 
 
@@ -58,6 +60,7 @@ body{
     border-bottom: 1px solid rgba(255, 255, 255, 0.521);
     color: white;
     background: rgb(0, 0, 0);
+    justify-content: center;
 }
 
 .room-title{
@@ -68,7 +71,7 @@ body{
 .room-content{
     display: flex;
     width: 100%;
-    height: 100%;
+    flex: 1;
     text-align: left;
     border-bottom: 1px solid white;
 }
@@ -100,6 +103,8 @@ body{
     min-width: 300px;
     border-right: 1px solid rgba(255, 255, 255, 0.521);
     background: black;
+    display: flex;
+    flex-direction: column;
 }
 
 .chatting-wrapper{
@@ -113,6 +118,8 @@ body{
 
 
 .shared-file-list-wrapper{
+    display: flex;
+    flex-direction: column;
     flex: 1;
     border-right: 1px solid rgba(255, 255, 255, 0.521);
     vertical-align: top;
@@ -163,13 +170,12 @@ body{
 
 
 .chat-list{
-    flex: 1;
-
-    height: 100%;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
     width: 100%;
+    height: 300px;
     max-width: 300px;
-    max-height: 100%;
     padding: 10px;
     box-sizing: border-box;
     background-color: rgb(56, 56, 56);
@@ -265,16 +271,19 @@ body{
 }
 
 .file-entry-area{
-    display: flex;
     position: relative;
     flex: 1;
-    overflow-y: auto;
+    overflow-y: scroll;
+}
+
+.table-wrapper{
+    height: 100px;
 }
 
 .file-list-table{
     width: 100%;
-    /* height: 100%; */
     text-align: center;
+    overflow-y: hidden;
 
     /* table-layout: fixed; */
 }
